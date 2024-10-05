@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traveling Forum & Stilizētas Kartītes</title>
+    <!-- Pievieno FontAwesome ikonu bibliotēku -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Globālais reset un pamata stils */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(120deg, #fef8e8, #f4e0c5);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Header un navigācija */
+        header {
+            background-color: #008080;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        nav {
+            margin: 10px 0;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.1em;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        nav a i {
+            margin-right: 8px;
+        }
+
+        /* Dark Mode toggle poga */
+        #dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #dark-mode-toggle:hover {
+            background-color: #2980b9;
+        }
+
+        /* Main un layout */
+        main {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        article {
+            flex: 3;
+            background-color: #fff;
+            padding: 20px;
+            margin-right: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        aside {
+            flex: 1;
+            background-color: #e0e0e0;
+            padding: 15px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        footer {
+            background-color: #008080;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Kartīšu stils un hover efekti */
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 30%;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .card h3 {
+            margin: 15px 0;
+            color: #333;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .card button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .card button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .card-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 80%;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Dark mode klases stili */
+        body.dark-mode {
+            background-image: linear-gradient(120deg, #333, #1e1e1e);
+            color: #e0e0e0;
+        }
+
+        header.dark-mode {
+            background-color: #004d4d;
+        }
+
+        article.dark-mode, aside.dark-mode, footer.dark-mode {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        .card.dark-mode {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        }
+
+        .card.dark-mode:hover {
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Modal window styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header sadaļa ar navigāciju -->
+    <header>
+        <h1>Traveling Forum</h1>
+        <nav>
+            <a id="homeLink"><i class="fas fa-home"></i>Home</a>
+            <a id="aboutLink"><i class="fas fa-info-circle"></i>About</a>
+            <a id="contactLink"><i class="fas fa-envelope"></i>Contact</a>
+        </nav>
+        <button id="dark-mode-toggle">Dark Mode</button>
+    </header>
+
+    <!-- Main saturs ar artikulu un aside -->
+    <main>
+        <article>
+            <h1>Discover the World</h1>
+            <h2>Find Your Next Adventure</h2>
+            <p>Welcome to the Traveling Forum! Here you can find all the information you need for your next trip. From
+                the best places to stay and eat to must-see attractions, we've got you covered. Explore the world
+                through the experiences of other travelers and share your own stories.</p>
+            <img src="https://millennium2.home.blog/wp-content/uploads/2018/12/dental-emergency-travelling-825x550.jpg"
+                alt="Travel image">
+        </article>
+
+        <aside id="asideInfo">
+            <h3>More Information</h3>
+            <div id="homeInfo" class="aside-content active">
+                <p>All countries and cities are in one touch! We can help you with it!</p>
+            </div>
+            <div id="aboutInfo" class="aside-content">
+                <p>Our company offers some information about countries you want to visit. You can also check the apartments,
+                    sights, sightseeing tours, restaurants, etc. Anything you want to know. Travel with enjoy!</p>
+            </div>
+            <div id="contactInfo" class="aside-content">
+                <p>E-mail: TravelVerse@gmail.com</p>
+                <p>Phone: +37122334455</p>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Kartītes ar hover efektiem -->
+    <div class="card-container">
+        <div class="card">
+            <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg" alt="Product Image">
+            <h3>Paris, France</h3>
+            <p>Vissromantīskā vieta pasaulē!</p>
+            <button class="open-modal" data-info="Šeit būs pieejama plašāka informacija par doto vietu!">Uzzināt vairāk</button>
+        </div>
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX6fpW2TjhAno_jYazvygMzQB52c7oX2CuKg&s" alt="Product Image">
+            <h3>Everest Base Camp</h3>
+            <p>Piedzīvojums dzīves garumā. Pārbaudi savas robežas!</p>
+            <button class="open-modal" data-info="Šeit būs pieejama plašāka informacija par doto vietu!">Uzzināt vairāk</button>
+        </div>
+
+        <div class="card">
+            <img src="https://cdn.britannica.com/15/189715-050-4310222B/Dubai-United-Arab-Emirates-Burj-Khalifa-top.jpg" alt="Product Image">
+            <h3>Dubai, UAE</h3>
+            <p>Futuristicā pilsēta tuksnesī. Iepirkšanās, debesskrāpji un kultūra.</p>
+            <button class="open-modal" data-info="Šeit būs pieejama plašāka informacija par doto vietu!">Uzzināt vairāk</button>
+        </div>
+    </div>
+
+    <!-- Modal window -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modal-info">Some text in the Modal..</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Traveling Forum. All rights reserved.</p>
+        <p><a href="#facebook" style="color: #fff;">Facebook</a> | <a href="#twitter" style="color: #fff;">Twitter</a>
+        </p>
+    </footer>
+
+    <script>
+        // Dark mode toggle function
+        const toggleButton = document.getElementById('dark-mode-toggle');
+        toggleButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('header').classList.toggle('dark-mode');
+            document.querySelector('article').classList.toggle('dark-mode');
+            document.querySelector('aside').classList.toggle('dark-mode');
+            document.querySelector('footer').classList.toggle('dark-mode');
+
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.toggle('dark-mode');
+            });
+        });
+
+        // Function to display the corresponding section info
+        const homeLink = document.getElementById('homeLink');
+        const aboutLink = document.getElementById('aboutLink');
+        const contactLink = document.getElementById('contactLink');
+
+        const homeInfo = document.getElementById('homeInfo');
+        const aboutInfo = document.getElementById('aboutInfo');
+        const contactInfo = document.getElementById('contactInfo');
+
+        homeLink.addEventListener('click', () => {
+            showInfo('home');
+        });
+
+        aboutLink.addEventListener('click', () => {
+            showInfo('about');
+        });
+
+        contactLink.addEventListener('click', () => {
+            showInfo('contact');
+        });
+
+        function showInfo(section) {
+            homeInfo.classList.remove('active');
+            aboutInfo.classList.remove('active');
+            contactInfo.classList.remove('active');
+
+            if (section === 'home') {
+                homeInfo.classList.add('active');
+            } else if (section === 'about') {
+                aboutInfo.classList.add('active');
+            } else if (section === 'contact') {
+                contactInfo.classList.add('active');
+            }
+        }
+
+        // Modal functionality
+        const modal = document.getElementById("myModal");
+        const modalContent = document.getElementById("modal-info");
+        const closeModal = document.getElementsByClassName("close")[0];
+
+        document.querySelectorAll(".open-modal").forEach(button => {
+            button.addEventListener("click", function () {
+                modal.style.display = "block";
+                modalContent.innerText = this.getAttribute("data-info");
+            });
+        });
+
+        closeModal.onclick = function () {
+            modal.style.display = "none";
+        };
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
+
+</body>
+
+</html>
