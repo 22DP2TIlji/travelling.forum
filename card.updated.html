@@ -185,7 +185,9 @@
             background-color: #004d4d;
         }
 
-        article.dark-mode, aside.dark-mode, footer.dark-mode {
+        article.dark-mode,
+        aside.dark-mode,
+        footer.dark-mode {
             background-color: #1e1e1e;
             color: #e0e0e0;
         }
@@ -267,22 +269,22 @@
 
         <aside id="asideInfo">
             <h3>More Information</h3>
-            <div id="homeInfo" class="aside-content active">
+            <div id="homeInfo" class="aside-content active" style="display: block;">
                 <p>All countries and cities are in one touch! We can help you with it!</p>
             </div>
-            <div id="aboutInfo" class="aside-content">
+            <div id="aboutInfo" class="aside-content" style="display: none;">
                 <p>Our company offers some information about countries you want to visit. You can also check the apartments,
                     sights, sightseeing tours, restaurants, etc. Anything you want to know. Travel with enjoy!</p>
             </div>
-            <div id="contactInfo" class="aside-content">
+            <div id="contactInfo" class="aside-content" style="display: none;">
                 <p>E-mail: TravelVerse@gmail.com</p>
                 <p>Phone: +37122334455</p>
             </div>
         </aside>
     </main>
 
-    <!-- Kartītes ar hover efektiem -->
-    <div class="card-container">
+     <!-- Kartītes ar hover efektiem -->
+     <div class="card-container">
         <div class="card">
             <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg" alt="Product Image">
             <h3>Paris, France</h3>
@@ -303,35 +305,19 @@
             <button class="open-modal" data-info="Šeit būs pieejama plašāka informacija par doto vietu!">Uzzināt vairāk</button>
         </div>
     </div>
-
-    <!-- Modal window -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p id="modal-info">Some text in the Modal..</p>
-        </div>
-    </div>
-
-    <!-- Footer -->
+    <!-- Footer sadaļa -->
     <footer>
-        <p>&copy; 2024 Traveling Forum. All rights reserved.</p>
-        <p><a href="#facebook" style="color: #fff;">Facebook</a> | <a href="#twitter" style="color: #fff;">Twitter</a>
-        </p>
+        <p>© 2024 Traveling Forum. All rights reserved.</p>
     </footer>
 
+    <!-- JavaScript daļa -->
     <script>
-        // Dark mode toggle function
+        // Dark mode funkcionalitāte
         const toggleButton = document.getElementById('dark-mode-toggle');
-        toggleButton.addEventListener('click', () => {
+        toggleButton.addEventListener('click', function () {
             document.body.classList.toggle('dark-mode');
-            document.querySelector('header').classList.toggle('dark-mode');
-            document.querySelector('article').classList.toggle('dark-mode');
-            document.querySelector('aside').classList.toggle('dark-mode');
-            document.querySelector('footer').classList.toggle('dark-mode');
-
-            document.querySelectorAll('.card').forEach(card => {
-                card.classList.toggle('dark-mode');
-            });
+            const elementsToToggle = [header, article, aside, footer];
+            elementsToToggle.forEach(el => el.classList.toggle('dark-mode'));
         });
 
         // Function to display the corresponding section info
@@ -343,55 +329,35 @@
         const aboutInfo = document.getElementById('aboutInfo');
         const contactInfo = document.getElementById('contactInfo');
 
-        homeLink.addEventListener('click', () => {
-            showInfo('home');
-        });
-
-        aboutLink.addEventListener('click', () => {
-            showInfo('about');
-        });
-
-        contactLink.addEventListener('click', () => {
-            showInfo('contact');
-        });
-
+        // Function to show the correct content
         function showInfo(section) {
-            homeInfo.classList.remove('active');
-            aboutInfo.classList.remove('active');
-            contactInfo.classList.remove('active');
+            homeInfo.style.display = 'none';
+            aboutInfo.style.display = 'none';
+            contactInfo.style.display = 'none';
 
+            // Show the relevant section
             if (section === 'home') {
-                homeInfo.classList.add('active');
+                homeInfo.style.display = 'block';
             } else if (section === 'about') {
-                aboutInfo.classList.add('active');
+                aboutInfo.style.display = 'block';
             } else if (section === 'contact') {
-                contactInfo.classList.add('active');
+                contactInfo.style.display = 'block';
+            } else {
+                // If no section is clicked, show forum information by default
+                homeInfo.style.display = 'block'; // You can replace this with forum-specific information
             }
         }
 
-        // Modal functionality
-        const modal = document.getElementById("myModal");
-        const modalContent = document.getElementById("modal-info");
-        const closeModal = document.getElementsByClassName("close")[0];
+        // Add event listeners for each navigation button
+        homeLink.addEventListener('click', () => showInfo('home'));
+        aboutLink.addEventListener('click', () => showInfo('about'));
+        contactLink.addEventListener('click', () => showInfo('contact'));
 
-        document.querySelectorAll(".open-modal").forEach(button => {
-            button.addEventListener("click", function () {
-                modal.style.display = "block";
-                modalContent.innerText = this.getAttribute("data-info");
-            });
-        });
-
-        closeModal.onclick = function () {
-            modal.style.display = "none";
-        };
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+        // Show forum information by default (or any other default section)
+        window.onload = function () {
+            showInfo(); // This will show the forum info by default on page load
         };
     </script>
-
 </body>
 
 </html>
